@@ -100,9 +100,28 @@ public class Drivetrain extends SubsystemBase {
    */
   public void visionDrive(double xSpeed, double zRotation){
 
+    double kpAim = -0.1;
+    double kpDistance = -0.1;
+
+    double min_command = 0.05;
+
     double tv = m_visionData.getEntry("tv").getDouble(0.0); //Does the limelight have a target 1 or 0
     double tx = m_visionData.getEntry("tx").getDouble(0.0); //Horizontal Offset from crosshair
     double ty = m_visionData.getEntry("ty").getDouble(0.0); //Vertical Offset from crosshair
+
+    double horizontalError = -tx;
+    double distanceError = -ty;
+
+    if(tx > 1){
+      zRotation -= kpAim * horizontalError - min_command; 
+    }
+    if(tx < 1){
+      zRotation += kpAim * horizontalError + min_command; 
+    }
+
+    xSpeed += kpDistance * distanceError;
+
+    comboDrive(xSpeed, zRotation);      
 
   }
 
