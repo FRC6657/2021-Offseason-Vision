@@ -127,6 +127,10 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public NetworkTable visionData(){
+    return m_visionData;
+  }
+
   @Override
   public void periodic() {
   }
