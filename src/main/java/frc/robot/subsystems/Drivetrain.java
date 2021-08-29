@@ -98,7 +98,7 @@ public class Drivetrain extends SubsystemBase {
    * @param xSpeed
    * @param zRotation
    */
-  public void visionDrive(double xSpeed, double zRotation){
+  public double[] visionDrive(double xSpeed, double zRotation){
 
     double kpAim = -0.1;
     double kpDistance = -0.1;
@@ -121,7 +121,9 @@ public class Drivetrain extends SubsystemBase {
 
     xSpeed += kpDistance * distanceError;
 
-    comboDrive(xSpeed, zRotation);      
+    double[] adjustments = {xSpeed,zRotation};
+
+    return adjustments;
 
   }
 
