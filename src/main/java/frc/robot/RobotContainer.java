@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.AimBot;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -18,6 +19,6 @@ public class RobotContainer {
   private void configureButtonBindings() {}
 
   public Command getAutonomousCommand() {
-    return null;
+    return new AimBot(m_drivetrain);
   }
 }
