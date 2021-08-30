@@ -27,14 +27,14 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
 
     m_frontLeft = new WPI_TalonSRX(1);
-    m_frontRight = new WPI_TalonSRX(2);
-    m_backLeft = new WPI_VictorSPX(3);
+    m_backLeft = new WPI_VictorSPX(2);
+    m_frontRight = new WPI_TalonSRX(3);
     m_backRight = new WPI_VictorSPX(4);
 
-    m_frontLeft.setNeutralMode(NeutralMode.Coast);
-    m_backLeft.setNeutralMode(NeutralMode.Coast);
-    m_frontRight.setNeutralMode(NeutralMode.Coast);
-    m_backRight.setNeutralMode(NeutralMode.Coast);
+    m_frontLeft.setNeutralMode(NeutralMode.Brake);
+    m_backLeft.setNeutralMode(NeutralMode.Brake);
+    m_frontRight.setNeutralMode(NeutralMode.Brake);
+    m_backRight.setNeutralMode(NeutralMode.Brake);
     
   }
 
