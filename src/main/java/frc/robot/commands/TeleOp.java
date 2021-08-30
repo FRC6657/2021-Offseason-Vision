@@ -55,9 +55,9 @@ public class TeleOp extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    double tx = Math.abs(m_drivetrain.visionData().getEntry("tx").getDouble(0.0)); //Horizontal Offset from crosshair
-    double ty = Math.abs(m_drivetrain.visionData().getEntry("ty").getDouble(0.0)); //Vertical Offset from crosshair
+    double tx = Math.abs(m_drivetrain.getLimelight().getdegRotationToTarget()); //Horizontal Offset from crosshair
+    double ty = Math.abs(m_drivetrain.getLimelight().getdegVerticalToTarget()); //Vertical Offset from crosshair
 
-    return ((tx < 0.1) && (ty < 0.1));
+    return ((tx < 1) && (ty < 1));
   }
 }

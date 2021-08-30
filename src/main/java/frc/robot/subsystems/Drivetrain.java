@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import oi.limelightvision.limelight.frc.LimeLight;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -23,8 +24,7 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup m_leftmotors;
   private SpeedControllerGroup m_rightmotors;
 
-  private NetworkTableInstance m_limelight = NetworkTableInstance.getDefault();
-  private NetworkTable m_visionData = m_limelight.getTable("limelight");
+  private LimeLight m_limelight = new LimeLight();
 
   public Drivetrain() {
 
@@ -60,14 +60,14 @@ public class Drivetrain extends SubsystemBase {
 
     double min_command = 0.05;
 
-    double tv = m_visionData.getEntry("tv").getDouble(0.0); //Does the limelight have a target 1 or 0
-    double tx = m_visionData.getEntry("tx").getDouble(0.0); //Horizontal Offset from crosshair
-    double ty = m_visionData.getEntry("ty").getDouble(0.0); //Vertical Offset from crosshair
+    boolean tv = m_limelight.getIsTargetFound();
+    double tx = m_limelight.getdegRotationToTarget();
+    double ty = m_limelight.getdegVerticalToTarget();
 
     double xSpeed = 0;
     double zRotation = 0;
 
-    if(tv != 0){
+    if(tv){
 
       double horizontalError = -tx;
       double distanceError = -ty;
@@ -105,8 +105,8 @@ public class Drivetrain extends SubsystemBase {
 
     double min_command = 0.05;
 
-    double tx = m_visionData.getEntry("tx").getDouble(0.0); //Horizontal Offset from crosshair
-    double ty = m_visionData.getEntry("ty").getDouble(0.0); //Vertical Offset from crosshair
+    double tx = m_limelight.getdegRotationToTarget();
+    double ty = m_limelight.getdegVerticalToTarget();
 
     double horizontalError = -tx;
     double distanceError = -ty;
@@ -126,8 +126,8 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public NetworkTable visionData(){
-    return m_visionData;
+  public LimeLight getLimelight(){
+    return m_limelight;
   }
 
   @Override
