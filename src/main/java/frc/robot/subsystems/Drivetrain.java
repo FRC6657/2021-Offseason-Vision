@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import oi.limelightvision.limelight.frc.LimeLight;
 
 public class Drivetrain extends SubsystemBase {
@@ -40,14 +41,62 @@ public class Drivetrain extends SubsystemBase {
 
   public void comboDrive(double xSpeed, double zRotation) {
 
-    double leftPower = xSpeed + zRotation;
-    double rightPower = -(xSpeed - zRotation);
+    xSpeed = MathUtil.clamp(xSpeed, -1, 1);
+    zRotation = MathUtil.clamp(zRotation, -1, 1);
+
+    xSpeed = applyDeadband(xSpeed, 0.05);
+    zRotation = applyDeadband(xSpeed, 0.05);
+
+    double[] wheelSpeeds = new double[2];
+
+    wheelSpeeds[0] = xSpeed + zRotation; //Left
+    wheelSpeeds[1] = -(xSpeed - zRotation); //Right
+
+    normalize(wheelSpeeds);
   
-    m_leftmotors.set(leftPower);
-    m_rightmotors.set(rightPower);
+    m_leftmotors.set(wheelSpeeds[0] * 0.5);
+    m_rightmotors.set(wheelSpeeds[1] * 0.5);
 
   }
 
+  /**
+   * @param wheelSpeeds Array of wheel speeds to normalize
+   * 
+   * This function takes an array of values and normalize them.
+   * Keeping all of the values in line with what should be passed
+   * to the motors while also preserving the magnitude difference
+   * between each values.
+   */
+  private void normalize(double[] wheelSpeeds) {
+    double maxMagnitude = Math.abs(wheelSpeeds[0]);
+    for (int i = 1; i < wheelSpeeds.length; i++) {
+      double temp = Math.abs(wheelSpeeds[i]);
+      if (maxMagnitude < temp) {
+        maxMagnitude = temp;
+      }
+    }
+    if (maxMagnitude > 1.0) {
+      for (int i = 0; i < wheelSpeeds.length; i++) {
+        wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+      }
+    }
+  }
+
+  /**
+   * @param input    Input in need of a deadband
+   * @param deadband Deadband threshold
+   */
+  private double applyDeadband(double input, double deadband) {
+    if (Math.abs(input) > deadband) {
+      if (input > 0.0) {
+        return (input - deadband) / (1.0 - deadband);
+      } else {
+        return (input + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
   /**
    * Autonomous Vision Drive
    */
