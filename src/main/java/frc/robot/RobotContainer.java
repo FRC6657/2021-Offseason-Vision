@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.AimBot;
+//import frc.robot.commands.AimBot;
 import frc.robot.commands.TeleOp;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.XboxController;
@@ -32,6 +32,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new AimBot(m_drivetrain);
+    return null;
   }
 }

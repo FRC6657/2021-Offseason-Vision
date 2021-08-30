@@ -97,9 +97,10 @@ public class Drivetrain extends SubsystemBase {
       return 0.0;
     }
   }
+  
   /**
    * Autonomous Vision Drive
-   */
+  */
   public void visionDrive(){
 
     double kpAim = -0.1;
@@ -139,7 +140,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  /**
+  /*
    * TeleOp Vision Drive
    * 
    * @param xSpeed
