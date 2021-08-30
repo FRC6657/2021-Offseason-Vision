@@ -42,9 +42,6 @@ public class AimBot extends CommandBase {
 
   @Override
   public boolean isFinished() {
-
-    
-
     return false;
   }
 }
