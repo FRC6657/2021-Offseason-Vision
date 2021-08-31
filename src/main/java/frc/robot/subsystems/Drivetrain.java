@@ -42,24 +42,24 @@ public class Drivetrain extends SubsystemBase {
 
   public void comboDrive(double xSpeed, double zRotation) {
 
-    xSpeed = MathUtil.clamp(xSpeed, -1, 1);
-    zRotation = MathUtil.clamp(zRotation, -1, 1);
+    xSpeed = MathUtil.clamp(xSpeed, -1, 1); //Limits input to an acceptable range
+    zRotation = MathUtil.clamp(zRotation, -1, 1); //Limits input to an acceptable range
 
-    xSpeed = applyDeadband(xSpeed, 0.05);
-    zRotation = applyDeadband(xSpeed, 0.05);
+    xSpeed = applyDeadband(xSpeed, 0.05); //Apply a small deadband to inputs
+    zRotation = applyDeadband(xSpeed, 0.05); //Apply a small deadband to inputs
 
-    double[] wheelSpeeds = new double[2];
+    double[] wheelSpeeds = new double[2]; //Wheel speed array
 
-    wheelSpeeds[0] = xSpeed + zRotation; //Left
-    wheelSpeeds[1] = -(xSpeed - zRotation); //Right
+    wheelSpeeds[0] = xSpeed + zRotation; //Left Speed
+    wheelSpeeds[1] = -(xSpeed - zRotation); //Right Speed
 
-    normalize(wheelSpeeds);
+    normalize(wheelSpeeds); //Maintain magnitude while staying below an output of 1
   
-    SmartDashboard.putNumber("left-motor", wheelSpeeds[0]);
-    SmartDashboard.putNumber("right-motor", wheelSpeeds[1]);
+    SmartDashboard.putNumber("left-motor", wheelSpeeds[0]); //Put left motor power on the Dashboard
+    SmartDashboard.putNumber("right-motor", wheelSpeeds[1]); //Put right motor power on the Dashboard
 
-    //m_leftmotors.set(wheelSpeeds[0] * 0.5);
-    //m_rightmotors.set(wheelSpeeds[1] * 0.5);
+    //m_leftmotors.set(wheelSpeeds[0] * 0.5); //Set Left Motor Speed
+    //m_rightmotors.set(wheelSpeeds[1] * 0.5); //Set Right Motor Speed
 
   }
 
