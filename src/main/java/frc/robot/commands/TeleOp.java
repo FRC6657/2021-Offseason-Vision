@@ -2,6 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -32,18 +33,7 @@ public class TeleOp extends CommandBase {
 
   @Override
   public void execute() {
-
-    if(aimbot){
-
-      double[] adjustments = m_drivetrain.visionDrive(xSpeed, zRotation);
-      m_drivetrain.comboDrive(xSpeed-adjustments[0], zRotation-adjustments[1]);
-
-    }
-    else{
-
-      m_drivetrain.comboDrive(xSpeed, zRotation);
-
-    }
+    m_drivetrain.comboDrive(xSpeed, zRotation);
   }
 
   @Override
@@ -55,9 +45,6 @@ public class TeleOp extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    double tx = Math.abs(m_drivetrain.visionData().getEntry("tx").getDouble(0.0)); //Horizontal Offset from crosshair
-    double ty = Math.abs(m_drivetrain.visionData().getEntry("ty").getDouble(0.0)); //Vertical Offset from crosshair
-
-    return ((tx < 0.1) && (ty < 0.1));
+    return false;
   }
 }

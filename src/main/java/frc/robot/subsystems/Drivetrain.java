@@ -8,10 +8,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
+import oi.limelightvision.limelight.frc.LimeLight;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -23,36 +23,84 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup m_leftmotors;
   private SpeedControllerGroup m_rightmotors;
 
-  private NetworkTableInstance m_limelight = NetworkTableInstance.getDefault();
-  private NetworkTable m_visionData = m_limelight.getTable("limelight");
+  private LimeLight m_limelight = new LimeLight();
 
   public Drivetrain() {
 
     m_frontLeft = new WPI_TalonSRX(1);
-    m_frontRight = new WPI_TalonSRX(2);
-    m_backLeft = new WPI_VictorSPX(3);
+    m_backLeft = new WPI_VictorSPX(2);
+    m_frontRight = new WPI_TalonSRX(3);
     m_backRight = new WPI_VictorSPX(4);
 
-    m_frontLeft.setNeutralMode(NeutralMode.Coast);
-    m_backLeft.setNeutralMode(NeutralMode.Coast);
-    m_frontRight.setNeutralMode(NeutralMode.Coast);
-    m_backRight.setNeutralMode(NeutralMode.Coast);
+    m_frontLeft.setNeutralMode(NeutralMode.Brake);
+    m_backLeft.setNeutralMode(NeutralMode.Brake);
+    m_frontRight.setNeutralMode(NeutralMode.Brake);
+    m_backRight.setNeutralMode(NeutralMode.Brake);
     
   }
 
   public void comboDrive(double xSpeed, double zRotation) {
 
-    double leftPower = xSpeed + zRotation;
-    double rightPower = -(xSpeed - zRotation);
+    xSpeed = MathUtil.clamp(xSpeed, -1, 1);
+    zRotation = MathUtil.clamp(zRotation, -1, 1);
+
+    xSpeed = applyDeadband(xSpeed, 0.05);
+    zRotation = applyDeadband(xSpeed, 0.05);
+
+    double[] wheelSpeeds = new double[2];
+
+    wheelSpeeds[0] = xSpeed + zRotation; //Left
+    wheelSpeeds[1] = -(xSpeed - zRotation); //Right
+
+    normalize(wheelSpeeds);
   
-    m_leftmotors.set(leftPower);
-    m_rightmotors.set(rightPower);
+    m_leftmotors.set(wheelSpeeds[0] * 0.5);
+    m_rightmotors.set(wheelSpeeds[1] * 0.5);
 
   }
 
   /**
-   * Autonomous Vision Drive
+   * @param wheelSpeeds Array of wheel speeds to normalize
+   * 
+   * This function takes an array of values and normalize them.
+   * Keeping all of the values in line with what should be passed
+   * to the motors while also preserving the magnitude difference
+   * between each values.
    */
+  private void normalize(double[] wheelSpeeds) {
+    double maxMagnitude = Math.abs(wheelSpeeds[0]);
+    for (int i = 1; i < wheelSpeeds.length; i++) {
+      double temp = Math.abs(wheelSpeeds[i]);
+      if (maxMagnitude < temp) {
+        maxMagnitude = temp;
+      }
+    }
+    if (maxMagnitude > 1.0) {
+      for (int i = 0; i < wheelSpeeds.length; i++) {
+        wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+      }
+    }
+  }
+
+  /**
+   * @param input    Input in need of a deadband
+   * @param deadband Deadband threshold
+   */
+  private double applyDeadband(double input, double deadband) {
+    if (Math.abs(input) > deadband) {
+      if (input > 0.0) {
+        return (input - deadband) / (1.0 - deadband);
+      } else {
+        return (input + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
+  
+  /**
+   * Autonomous Vision Drive
+  */
   public void visionDrive(){
 
     double kpAim = -0.1;
@@ -60,14 +108,14 @@ public class Drivetrain extends SubsystemBase {
 
     double min_command = 0.05;
 
-    double tv = m_visionData.getEntry("tv").getDouble(0.0); //Does the limelight have a target 1 or 0
-    double tx = m_visionData.getEntry("tx").getDouble(0.0); //Horizontal Offset from crosshair
-    double ty = m_visionData.getEntry("ty").getDouble(0.0); //Vertical Offset from crosshair
+    boolean tv = m_limelight.getIsTargetFound();
+    double tx = m_limelight.getdegRotationToTarget();
+    double ty = m_limelight.getdegVerticalToTarget();
 
     double xSpeed = 0;
     double zRotation = 0;
 
-    if(tv != 0){
+    if(tv){
 
       double horizontalError = -tx;
       double distanceError = -ty;
@@ -92,7 +140,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  /**
+  /*
    * TeleOp Vision Drive
    * 
    * @param xSpeed
@@ -105,9 +153,8 @@ public class Drivetrain extends SubsystemBase {
 
     double min_command = 0.05;
 
-    double tv = m_visionData.getEntry("tv").getDouble(0.0); //Does the limelight have a target 1 or 0
-    double tx = m_visionData.getEntry("tx").getDouble(0.0); //Horizontal Offset from crosshair
-    double ty = m_visionData.getEntry("ty").getDouble(0.0); //Vertical Offset from crosshair
+    double tx = m_limelight.getdegRotationToTarget();
+    double ty = m_limelight.getdegVerticalToTarget();
 
     double horizontalError = -tx;
     double distanceError = -ty;
@@ -127,8 +174,8 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public NetworkTable visionData(){
-    return m_visionData;
+  public LimeLight getLimelight(){
+    return m_limelight;
   }
 
   @Override

@@ -42,9 +42,8 @@ public class AimBot extends CommandBase {
 
   @Override
   public boolean isFinished() {
-
-    
-
-    return false;
+    double xError = m_drivetrain.getLimelight().getdegRotationToTarget();
+    double yError = m_drivetrain.getLimelight().getdegVerticalToTarget();
+    return ((Math.abs(xError) < 1) && (Math.abs(yError) < 1));
   }
 }
