@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import oi.limelightvision.limelight.frc.LimeLight;
@@ -54,8 +55,11 @@ public class Drivetrain extends SubsystemBase {
 
     normalize(wheelSpeeds);
   
-    m_leftmotors.set(wheelSpeeds[0] * 0.5);
-    m_rightmotors.set(wheelSpeeds[1] * 0.5);
+    SmartDashboard.putNumber("left-motor", wheelSpeeds[0]);
+    SmartDashboard.putNumber("right-motor", wheelSpeeds[1]);
+
+    //m_leftmotors.set(wheelSpeeds[0] * 0.5);
+    //m_rightmotors.set(wheelSpeeds[1] * 0.5);
 
   }
 
@@ -180,6 +184,9 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+
+
   }
   @Override
   public void simulationPeriodic() {

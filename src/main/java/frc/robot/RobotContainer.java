@@ -4,19 +4,28 @@
 
 package frc.robot;
 
+import frc.robot.commands.AimBot;
 //import frc.robot.commands.AimBot;
 import frc.robot.commands.TeleOp;
 import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class RobotContainer {
 
   private final Drivetrain m_drivetrain = new Drivetrain();
 
   private final XboxController m_controller = new XboxController(0);
+
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  private final AimBot m_aimbot = new AimBot(m_drivetrain);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -29,9 +38,13 @@ public class RobotContainer {
       m_controller.getRawAxis(Axis.kRightX.value),
       m_controller.getRawButton(Button.kA.value)
     ));
+
+    m_chooser.setDefaultOption("Aim", m_aimbot);
+
+    Shuffleboard.getTab("Match").add(m_chooser);
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    return m_chooser.getSelected();
   }
 }
