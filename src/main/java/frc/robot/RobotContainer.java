@@ -5,8 +5,10 @@
 package frc.robot;
 
 import frc.robot.commands.AimBot;
+import frc.robot.commands.OuttakePowercells;
 import frc.robot.commands.TeleOp;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Outtake;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,11 +16,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
   private final Drivetrain m_drivetrain = new Drivetrain(); //Drivetrain Subsystem
-  private final Joystick m_joystick = new Joystick(0); //Controller
+  private final Outtake m_outtake = new Outtake();
+  private final Joystick m_nes = new Joystick(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
   private final AimBot m_aimbot = new AimBot(m_drivetrain); //Aimbot Command
 
@@ -31,9 +35,16 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
-      () -> m_joystick.getY(),
-      () -> m_joystick.getX()
+      () -> m_nes.getY(),
+      () -> m_nes.getX()
     ));
+
+    final JoystickButton a = new JoystickButton(m_nes, 0);
+    final JoystickButton b = new JoystickButton(m_nes, 1);
+    final JoystickButton select = new JoystickButton(m_nes, 2);
+    final JoystickButton start = new JoystickButton(m_nes, 3);
+
+    a.whenHeld(new OuttakePowercells(m_outtake));
 
     m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
 
