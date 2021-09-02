@@ -5,6 +5,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
@@ -12,10 +14,10 @@ import frc.robot.subsystems.Drivetrain;
 public class TeleOp extends CommandBase {
 
   Drivetrain m_drivetrain;
-  double xSpeed;
-  double zRotation;
+  DoubleSupplier xSpeed;
+  DoubleSupplier zRotation;
 
-  public TeleOp(Drivetrain m_drivetrain, double xSpeed, double zRotation) {
+  public TeleOp(Drivetrain m_drivetrain, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     
     this.m_drivetrain = m_drivetrain;
     this.xSpeed = xSpeed;
@@ -32,11 +34,8 @@ public class TeleOp extends CommandBase {
 
   @Override
   public void execute() {
-    m_drivetrain.comboDrive(xSpeed, zRotation);
-    SmartDashboard.putNumber("xSpeed", xSpeed);
-    SmartDashboard.putNumber("zRotation", zRotation);
-    System.out.println("xSpeed: " + Double.toString(xSpeed));
-    System.out.println("zRotation: " + Double.toString(zRotation));
+    m_drivetrain.comboDrive(-xSpeed.getAsDouble(), zRotation.getAsDouble());
+
   }
 
   @Override

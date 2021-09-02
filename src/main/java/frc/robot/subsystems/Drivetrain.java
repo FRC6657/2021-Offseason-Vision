@@ -37,13 +37,20 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.setNeutralMode(NeutralMode.Brake);
     m_frontRight.setNeutralMode(NeutralMode.Brake);
     m_backRight.setNeutralMode(NeutralMode.Brake);
+
+    m_leftmotors = new SpeedControllerGroup(m_frontLeft, m_backLeft);
+    m_rightmotors = new SpeedControllerGroup(m_frontRight, m_backRight);
     
   }
 
   public void comboDrive(double xSpeed, double zRotation) {
 
-    xSpeed = MathUtil.clamp(xSpeed, -1, 1);
-    zRotation = MathUtil.clamp(zRotation, -1, 1);
+    
+   //System.out.println("xSpeed1: " + Double.toString(xSpeed));
+   //System.out.println("zRotation1: " + Double.toString(zRotation));
+
+   xSpeed = MathUtil.clamp(xSpeed, -1, 1);
+   zRotation = MathUtil.clamp(zRotation, -1, 1);
 
     double[] wheelSpeeds = new double[2];
 
@@ -55,11 +62,11 @@ public class Drivetrain extends SubsystemBase {
     wheelSpeeds[0] *= 0.25;
     wheelSpeeds[1] *= 0.25;
 
-    SmartDashboard.putNumber("left-motor",  wheelSpeeds[0]); //Put left motor power on the Dashboard
-    SmartDashboard.putNumber("right-motor", wheelSpeeds[1]); //Put right motor power on the Dashboard
+    m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Speed
+    m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Speed
 
-    //m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Speed
-    //m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Speed
+    SmartDashboard.putNumber("left-motor",  m_leftmotors.get()); //Put left motor power on the Dashboard
+    SmartDashboard.putNumber("right-motor", m_rightmotors.get()); //Put right motor power on the Dashboard
 
   }
 
