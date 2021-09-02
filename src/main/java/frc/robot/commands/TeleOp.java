@@ -5,6 +5,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -13,14 +14,12 @@ public class TeleOp extends CommandBase {
   Drivetrain m_drivetrain;
   double xSpeed;
   double zRotation;
-  boolean aimbot;
 
-  public TeleOp(Drivetrain m_drivetrain, double xSpeed, double zRotation, boolean aimbot) {
+  public TeleOp(Drivetrain m_drivetrain, double xSpeed, double zRotation) {
     
     this.m_drivetrain = m_drivetrain;
     this.xSpeed = xSpeed;
     this.zRotation = zRotation;
-    this.aimbot = aimbot;
 
     addRequirements(m_drivetrain);
 
@@ -34,6 +33,10 @@ public class TeleOp extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.comboDrive(xSpeed, zRotation);
+    SmartDashboard.putNumber("xSpeed", xSpeed);
+    SmartDashboard.putNumber("zRotation", zRotation);
+    System.out.println("xSpeed: " + Double.toString(xSpeed));
+    System.out.println("zRotation: " + Double.toString(zRotation));
   }
 
   @Override
