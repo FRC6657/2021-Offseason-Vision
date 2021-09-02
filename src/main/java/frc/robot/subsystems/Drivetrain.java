@@ -129,7 +129,7 @@ public class Drivetrain extends SubsystemBase {
     if(tv){
 
       double horizontalError = -tx;
-      double distanceError = -ty;
+      double distanceError = 0;
 
       if(tx > 1){
         zRotation = kpAim * horizontalError - min_command; 
