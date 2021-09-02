@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,28 +15,34 @@ import oi.limelightvision.limelight.frc.LimeLight;
 
 public class Drivetrain extends SubsystemBase {
 
+  //Motor Declaration
   private WPI_TalonSRX m_frontLeft;
   private WPI_VictorSPX m_backLeft;
   private WPI_TalonSRX m_frontRight;
   private WPI_VictorSPX m_backRight;
 
+  //Motor Groups
   private SpeedControllerGroup m_leftmotors;
   private SpeedControllerGroup m_rightmotors;
 
+  //Limelight 🙏
   private LimeLight m_limelight = new LimeLight();
 
   public Drivetrain() {
 
+    //Motor CAN Assignments
     m_frontLeft = new WPI_TalonSRX(1);
     m_backLeft = new WPI_VictorSPX(2);
     m_frontRight = new WPI_TalonSRX(3);
     m_backRight = new WPI_VictorSPX(4);
 
+    //Enable Auto Brake
     m_frontLeft.setNeutralMode(NeutralMode.Brake);
     m_backLeft.setNeutralMode(NeutralMode.Brake);
     m_frontRight.setNeutralMode(NeutralMode.Brake);
     m_backRight.setNeutralMode(NeutralMode.Brake);
 
+    //Assign motors to groups
     m_leftmotors = new SpeedControllerGroup(m_frontLeft, m_backLeft);
     m_rightmotors = new SpeedControllerGroup(m_frontRight, m_backRight);
     
@@ -45,25 +50,24 @@ public class Drivetrain extends SubsystemBase {
 
   public void comboDrive(double xSpeed, double zRotation) {
 
-    
-   //System.out.println("xSpeed1: " + Double.toString(xSpeed));
-   //System.out.println("zRotation1: " + Double.toString(zRotation));
+    xSpeed = MathUtil.clamp(xSpeed, -1, 1); //Prevents Extranious Input
+    zRotation = MathUtil.clamp(zRotation, -1, 1); //Prevents Extranious Input
 
-   xSpeed = MathUtil.clamp(xSpeed, -1, 1);
-   zRotation = MathUtil.clamp(zRotation, -1, 1);
+    xSpeed = applyDeadband(xSpeed, 0.05); //Prevent Unwanted Input
+    zRotation = applyDeadband(zRotation, 0.05); //Prevent Unwanted Input
 
-    double[] wheelSpeeds = new double[2];
+    double[] wheelSpeeds = new double[2]; //Create Motor Power Array
 
     wheelSpeeds[0] = xSpeed + zRotation; //Left Speed
     wheelSpeeds[1] = -(xSpeed - zRotation); //Right Speed
   
-    normalize(wheelSpeeds);
+    normalize(wheelSpeeds); //Scale values down while maintaining magnitude
 
-    wheelSpeeds[0] *= 0.25;
-    wheelSpeeds[1] *= 0.25;
+    wheelSpeeds[0] *= 0.25; //Lower Output
+    wheelSpeeds[1] *= 0.25; //Lower Output
 
-    m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Speed
-    m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Speed
+    m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Powers
+    m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Powers
 
     SmartDashboard.putNumber("left-motor",  m_leftmotors.get()); //Put left motor power on the Dashboard
     SmartDashboard.putNumber("right-motor", m_rightmotors.get()); //Put right motor power on the Dashboard
@@ -113,24 +117,30 @@ public class Drivetrain extends SubsystemBase {
    * Autonomous Vision Drive
   */
   public void visionDrive(){
-
+    //kP values
     double kpAim = -0.1;
     double kpDistance = -0.1;
 
+    //I term replacement
     double min_command = 0.05;
 
+    //Limelight Data
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
     double ty = m_limelight.getdegVerticalToTarget();
 
+    //Creates Local Speed Variables
     double xSpeed = 0;
     double zRotation = 0;
 
+    //Go to target if it is found
     if(tv){
 
-      double horizontalError = -tx;
-      double distanceError = 0;
+      //Error Values
+      double horizontalError = -tx; //Turn Error
+      double distanceError = 0; //Range Error Currently Disabled should be ty
 
+      //Turn left or right
       if(tx > 1){
         zRotation = kpAim * horizontalError - min_command; 
       }
@@ -138,64 +148,30 @@ public class Drivetrain extends SubsystemBase {
         zRotation = kpAim * horizontalError + min_command; 
       }
 
+      //Calculate Distance
       xSpeed = kpDistance * distanceError;
 
-      comboDrive(xSpeed, zRotation);      
+      comboDrive(xSpeed, zRotation); //Drive with the calculated parameters 
 
     }
+    //Seek if no target found
     else{
 
       zRotation = 0.3;
+      comboDrive(xSpeed, zRotation); //Turn Slowly
 
     }
 
   }
 
-  /*
-   * TeleOp Vision Drive
-   * 
-   * @param xSpeed
-   * @param zRotation
-   */
-  public double[] visionDrive(double xSpeed, double zRotation){
-
-    double kpAim = -0.1;
-    double kpDistance = -0.1;
-
-    double min_command = 0.05;
-
-    double tx = m_limelight.getdegRotationToTarget();
-    double ty = m_limelight.getdegVerticalToTarget();
-
-    double horizontalError = -tx;
-    double distanceError = -ty;
-
-    if(tx > 1){
-      zRotation -= kpAim * horizontalError - min_command; 
-    }
-    if(tx < 1){
-      zRotation += kpAim * horizontalError + min_command; 
-    }
-
-    xSpeed += kpDistance * distanceError;
-
-    double[] adjustments = {xSpeed,zRotation};
-
-    return adjustments;
-
-  }
-
+  //Allows external limelght access
   public LimeLight getLimelight(){
     return m_limelight;
   }
 
   @Override
-  public void periodic() {
+  public void periodic() {}
 
-
-
-  }
   @Override
-  public void simulationPeriodic() {
-  }
+  public void simulationPeriodic() {}
 }
