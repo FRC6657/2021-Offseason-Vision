@@ -15,23 +15,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Outtake extends SubsystemBase {
 
+  //Motor Declaration
   private WPI_TalonSRX outtakeLeft;
   private WPI_TalonSRX outtakeRight;
+
+  //Servo Declaration
   private Servo gate;
 
   public Outtake() {
 
-      outtakeLeft = new WPI_TalonSRX(7);
-      outtakeRight = new WPI_TalonSRX(8);
-      gate = new Servo(9);
+    //Motor CAN Assignment
+    outtakeLeft = new WPI_TalonSRX(7);
+    outtakeRight = new WPI_TalonSRX(8);
 
-      outtakeLeft.setNeutralMode(NeutralMode.Coast);
-      outtakeRight.setNeutralMode(NeutralMode.Coast);
+    //Servo PWM Assignment
+    gate = new Servo(9);
+
+    //Disables brake mode
+    outtakeLeft.setNeutralMode(NeutralMode.Coast);
+    outtakeRight.setNeutralMode(NeutralMode.Coast);
 
   }
   //Outtakes
   public void outtakeOut(double speed) {
 
+    //I have no clue who the speeds both need to be negative
     outtakeLeft.set(-speed);
     outtakeRight.set(-speed);
 
