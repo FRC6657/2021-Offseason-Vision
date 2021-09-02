@@ -39,10 +39,10 @@ public class RobotContainer {
       () -> m_nes.getX()
     ));
 
-    final JoystickButton a = new JoystickButton(m_nes, 0);
-    final JoystickButton b = new JoystickButton(m_nes, 1);
-    final JoystickButton select = new JoystickButton(m_nes, 2);
-    final JoystickButton start = new JoystickButton(m_nes, 3);
+    final JoystickButton a = new JoystickButton(m_nes, 1);
+    final JoystickButton b = new JoystickButton(m_nes, 2);
+    final JoystickButton select = new JoystickButton(m_nes, 3);
+    final JoystickButton start = new JoystickButton(m_nes, 4);
 
     a.whenHeld(new OuttakePowercells(m_outtake));
 
