@@ -63,8 +63,8 @@ public class Drivetrain extends SubsystemBase {
   
     normalize(wheelSpeeds); //Scale values down while maintaining magnitude
 
-    wheelSpeeds[0] *= 0.25; //Lower Output
-    wheelSpeeds[1] *= 0.25; //Lower Output
+    wheelSpeeds[0] *= 0.5; //Lower Output
+    wheelSpeeds[1] *= 0.5; //Lower Output
 
     m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Powers
     m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Powers
@@ -118,16 +118,22 @@ public class Drivetrain extends SubsystemBase {
   */
   public void visionDrive(){
     //kP values
-    double kpAim = -0.1;
-    double kpDistance = -0.1;
+    double kpAim = 0.06;
+    double kpDistance = -0.04;
 
     //I term replacement
-    double min_command = 0.05;
+    double min_command = 0.1;
 
     //Limelight Data
+    /*
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
     double ty = m_limelight.getdegVerticalToTarget();
+    */
+
+    boolean tv = true;
+    double tx = 0; //+-29.8
+    double ty = -12.4; //+-24.85
 
     //Creates Local Speed Variables
     double xSpeed = 0;
@@ -138,15 +144,10 @@ public class Drivetrain extends SubsystemBase {
 
       //Error Values
       double horizontalError = -tx; //Turn Error
-      double distanceError = 0; //Range Error Currently Disabled should be ty
+      double distanceError = ty;
 
-      //Turn left or right
-      if(tx > 1){
-        zRotation = kpAim * horizontalError - min_command; 
-      }
-      if(tx < 1){
-        zRotation = kpAim * horizontalError + min_command; 
-      }
+      //Turn left or 
+      zRotation = kpAim * horizontalError;
 
       //Calculate Distance
       xSpeed = kpDistance * distanceError;
@@ -157,7 +158,9 @@ public class Drivetrain extends SubsystemBase {
     //Seek if no target found
     else{
 
-      zRotation = 0.3;
+      System.out.println("No Target");
+
+      zRotation = 0.25;
       comboDrive(xSpeed, zRotation); //Turn Slowly
 
     }
