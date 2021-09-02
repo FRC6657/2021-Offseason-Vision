@@ -9,7 +9,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class OuttakePowercells extends CommandBase {
@@ -46,6 +46,8 @@ public class OuttakePowercells extends CommandBase {
 
     m_outtake.outtakeOut(0.6);
 
+    SmartDashboard.putString("shooter-value", "On");
+
   }
 
   @Override
@@ -53,6 +55,8 @@ public class OuttakePowercells extends CommandBase {
     m_outtake.outtakeStop();
 
     m_outtake.setServoAngle(167);
+
+    SmartDashboard.putString("shooter-value", "Off");
 
   }
 
