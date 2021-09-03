@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.AimBot;
+import frc.robot.commands.MinCommandTesting;
 import frc.robot.commands.OuttakePowercells;
 import frc.robot.commands.TeleOp;
 import frc.robot.subsystems.Drivetrain;
@@ -23,6 +24,7 @@ public class RobotContainer {
   private final Joystick m_nes = new Joystick(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
   private final AimBot m_aimbot = new AimBot(m_drivetrain); //Aimbot Command
+  private final MinCommandTesting m_mintest = new MinCommandTesting(m_drivetrain, 0.01);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -45,6 +47,7 @@ public class RobotContainer {
     a.whenHeld(new OuttakePowercells(m_outtake));
 
     m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
+    m_chooser.addOption("MinTesting", m_mintest);
 
     SmartDashboard.putData("auto-chooser", m_chooser); //Send the Auto Chooser
   }
