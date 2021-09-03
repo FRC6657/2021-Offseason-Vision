@@ -53,18 +53,12 @@ public class Drivetrain extends SubsystemBase {
     xSpeed = MathUtil.clamp(xSpeed, -1, 1); //Prevents Extranious Input
     zRotation = MathUtil.clamp(zRotation, -1, 1); //Prevents Extranious Input
 
-    xSpeed = applyDeadband(xSpeed, 0.05); //Prevent Unwanted Input
-    zRotation = applyDeadband(zRotation, 0.05); //Prevent Unwanted Input
-
     double[] wheelSpeeds = new double[2]; //Create Motor Power Array
 
     wheelSpeeds[0] = xSpeed + zRotation; //Left Speed
     wheelSpeeds[1] = -(xSpeed - zRotation); //Right Speed
   
-    normalize(wheelSpeeds); //Scale values down while maintaining magnitude
-
-    wheelSpeeds[0] *= 0.5; //Lower Output
-    wheelSpeeds[1] *= 0.5; //Lower Output
+    //normalize(wheelSpeeds); //Scale values down while maintaining magnitude
 
     m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Powers
     m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Powers
@@ -118,18 +112,25 @@ public class Drivetrain extends SubsystemBase {
   */
   public void visionDrive(){
     //kP values
-    double kpAim = -0.1;
-    double kpDistance = -0.04;
+    //These are tuned so that the maximum combined output is 0.5
+    double kpAim = -0.0083892617;
+    double kpDistance = -0.0100603621;
 
     //I term replacement
     double min_command = 0.1;
 
     //Limelight Data
     
+  
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
     double ty = 0;//m_limelight.getdegVerticalToTarget();
-
+    
+    /*
+    boolean tv = true;
+    double tx = 29.8;
+    double ty = 24.85/2;
+    */
     //Creates Local Speed Variables
     double xSpeed = 0;
     double zRotation = 0;
@@ -141,11 +142,29 @@ public class Drivetrain extends SubsystemBase {
       double horizontalError = -tx; //Turn Error
       double distanceError = ty;
 
-      //Turn left or 
       zRotation = kpAim * horizontalError;
-
-      //Calculate Distance
       xSpeed = kpDistance * distanceError;
+
+      if(zRotation > 0){
+        if(zRotation < min_command){
+          zRotation += min_command;
+        }
+      }
+      else if(zRotation < 0){
+        if(zRotation > -min_command){
+          zRotation -= min_command;
+        }
+      }
+      if(xSpeed > 0){
+        if(xSpeed < min_command){
+          xSpeed += min_command;
+        }
+      }
+      else if(xSpeed < 0){
+        if(xSpeed > -min_command){
+          xSpeed -= min_command;
+        }
+      }
 
       comboDrive(xSpeed, zRotation); //Drive with the calculated parameters 
 

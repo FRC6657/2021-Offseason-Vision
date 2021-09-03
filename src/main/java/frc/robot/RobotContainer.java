@@ -24,7 +24,7 @@ public class RobotContainer {
   private final Joystick m_nes = new Joystick(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
   private final AimBot m_aimbot = new AimBot(m_drivetrain); //Aimbot Command
-  private final MinCommandTesting m_mintest = new MinCommandTesting(m_drivetrain, 0.01);
+  private final MinCommandTesting m_mintest = new MinCommandTesting(m_drivetrain, 0.1);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -35,8 +35,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
-      () -> m_nes.getY(),
-      () -> m_nes.getX()
+      () -> m_nes.getY() * 0.25,
+      () -> m_nes.getX() * 0.25
     ));
 
     final JoystickButton a = new JoystickButton(m_nes, 1);
