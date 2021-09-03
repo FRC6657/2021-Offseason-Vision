@@ -118,22 +118,17 @@ public class Drivetrain extends SubsystemBase {
   */
   public void visionDrive(){
     //kP values
-    double kpAim = 0.06;
+    double kpAim = -0.1;
     double kpDistance = -0.04;
 
     //I term replacement
     double min_command = 0.1;
 
     //Limelight Data
-    /*
+    
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
-    double ty = m_limelight.getdegVerticalToTarget();
-    */
-
-    boolean tv = true;
-    double tx = 0; //+-29.8
-    double ty = -12.4; //+-24.85
+    double ty = 0;//m_limelight.getdegVerticalToTarget();
 
     //Creates Local Speed Variables
     double xSpeed = 0;
