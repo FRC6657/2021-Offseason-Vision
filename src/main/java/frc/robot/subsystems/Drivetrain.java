@@ -121,16 +121,16 @@ public class Drivetrain extends SubsystemBase {
 
     //Limelight Data
     
-  
+    /*
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
     double ty = 0;//m_limelight.getdegVerticalToTarget();
+    */
     
-    /*
     boolean tv = true;
     double tx = 29.8;
-    double ty = 24.85/2;
-    */
+    double ty = 0;
+    
     //Creates Local Speed Variables
     double xSpeed = 0;
     double zRotation = 0;
