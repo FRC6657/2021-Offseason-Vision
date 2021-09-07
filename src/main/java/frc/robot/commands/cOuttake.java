@@ -12,7 +12,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class OuttakePowercells extends CommandBase {
+public class cOuttake extends CommandBase {
 
   private final Outtake m_outtake;
 
@@ -21,13 +21,13 @@ public class OuttakePowercells extends CommandBase {
    * <p>
    * This command raises the Hopper Gate when Initialized, and Lowers it when Ended
    *
-   * @param Outtake the Outtake Subsystem
+   * @param cOuttake the Outtake Subsystem
    * @see Outtake
    * 
    * @author Andrew Card
    */
 
-  public OuttakePowercells(Outtake m_outtake) {
+  public cOuttake(Outtake m_outtake) {
 
     this.m_outtake = m_outtake;
 

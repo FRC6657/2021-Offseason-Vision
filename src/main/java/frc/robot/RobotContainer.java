@@ -4,12 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.commands.AimBot;
-import frc.robot.commands.MinCommandTesting;
-import frc.robot.commands.OuttakePowercells;
-import frc.robot.commands.TeleOp;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Outtake;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +17,9 @@ public class RobotContainer {
 
   private final Drivetrain m_drivetrain = new Drivetrain(); //Drivetrain Subsystem
   private final Outtake m_outtake = new Outtake();
+  private final Intake m_intake = new Intake();
+  private final Agipotato m_agipotato = new Agipotato();
+
   private final Joystick m_nes = new Joystick(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
   private final AimBot m_aimbot = new AimBot(m_drivetrain); //Aimbot Command
@@ -44,7 +43,10 @@ public class RobotContainer {
     final JoystickButton select = new JoystickButton(m_nes, 3);
     final JoystickButton start = new JoystickButton(m_nes, 4);
 
-    a.whenHeld(new OuttakePowercells(m_outtake));
+    a.whenHeld(new cOuttake(m_outtake));
+    b.whenHeld(new cIntake(m_intake, 0.4));
+    select.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
+    start.whenHeld(new Agipotate(m_agipotato, 1.0));
 
     m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
     m_chooser.addOption("MinTesting", m_mintest);
