@@ -34,8 +34,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
-      () -> m_nes.getY() * 0.25,
-      () -> m_nes.getX() * 0.25
+      () -> m_nes.getY() * SmartDashboard.getNumber("speed-multiplier", 25)/100,
+      () -> m_nes.getX() * SmartDashboard.getNumber("speed-multiplier", 25)/100
     ));
 
     final JoystickButton a = new JoystickButton(m_nes, 1);
