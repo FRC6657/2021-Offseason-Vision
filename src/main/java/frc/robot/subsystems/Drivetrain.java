@@ -117,19 +117,19 @@ public class Drivetrain extends SubsystemBase {
     double kpDistance = -0.0100603621;
 
     //I term replacement
-    double min_command = 0.1;
+    double min_command = 0.08;
 
     //Limelight Data
     
-    /*
+    
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
-    double ty = 0;//m_limelight.getdegVerticalToTarget();
-    */
+    double ty = m_limelight.getdegVerticalToTarget();
     
-    boolean tv = true;
-    double tx = 29.8;
-    double ty = 0;
+    
+    //boolean tv = true;
+    //double tx = 29.8;
+    //double ty = 0;
     
     //Creates Local Speed Variables
     double xSpeed = 0;

@@ -44,7 +44,7 @@ public class cOuttake extends CommandBase {
   @Override
   public void execute() {
 
-    m_outtake.outtakeOut(0.6);
+    m_outtake.outtakeOut(0.9);
 
     SmartDashboard.putString("shooter-value", "On");
 
