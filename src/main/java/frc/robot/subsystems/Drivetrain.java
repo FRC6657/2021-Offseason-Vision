@@ -113,19 +113,17 @@ public class Drivetrain extends SubsystemBase {
   public void visionDrive(){
     //kP values
     //These are tuned so that the maximum combined output is 0.5
-    double kpAim = -0.0083892617;
-    double kpDistance = -0.0100603621;
+    double kpAim = -0.0083892617 * 1;
+    double kpDistance = -0.0100603621 * 1;
 
-    //I term replacement
-    double min_command = 0.08;
+    //I term replacement [set negative to disable]
+    double min_command = -0.05;
 
     //Limelight Data
-    
     
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
     double ty = m_limelight.getdegVerticalToTarget();
-    
     
     //boolean tv = true;
     //double tx = 29.8;
@@ -144,6 +142,13 @@ public class Drivetrain extends SubsystemBase {
 
       zRotation = kpAim * horizontalError;
       xSpeed = kpDistance * distanceError;
+
+      if(Math.abs(horizontalError) < 0.5){
+        horizontalError = 0;
+      }
+      if(Math.abs(distanceError) < 0.5){
+        distanceError = 0;
+      }
 
       if(zRotation > 0){
         if(zRotation < min_command){
@@ -174,8 +179,8 @@ public class Drivetrain extends SubsystemBase {
 
       System.out.println("No Target");
 
-      zRotation = 0.25;
-      //comboDrive(xSpeed, zRotation); //Turn Slowly
+      zRotation = 0.4;
+      comboDrive(xSpeed, zRotation); //Turn Slowly
 
     }
 
@@ -184,6 +189,13 @@ public class Drivetrain extends SubsystemBase {
   //Allows external limelght access
   public LimeLight getLimelight(){
     return m_limelight;
+  }
+
+  public double[] getMotorValues(){
+    double[] motorValues = new double[1];
+    motorValues[0] = m_leftmotors.get();
+    motorValues[1] = m_rightmotors.get();
+    return motorValues;
   }
 
   @Override

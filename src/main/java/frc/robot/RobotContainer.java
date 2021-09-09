@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
@@ -25,11 +26,19 @@ public class RobotContainer {
 
   private final XboxController m_controller = new XboxController(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
-  private final AimBot m_aimbot = new AimBot(m_drivetrain); //Aimbot Command
   private final MinCommandTesting m_mintest = new MinCommandTesting(m_drivetrain, 0.1);
 
   public RobotContainer() {
     configureButtonBindings();
+  }
+
+  public class AimShoot extends SequentialCommandGroup {
+    public AimShoot(){
+      addCommands(  
+        new AimBot(m_drivetrain),
+        new cOuttake(m_outtake).withTimeout(2) 
+      );
+    }
   }
 
   private void configureButtonBindings() {
@@ -63,11 +72,13 @@ public class RobotContainer {
     dPadRight.whenHeld(new Agipotate(m_agipotato, 1.0));
     dPadLeft.whenHeld(new Agipotate(m_agipotato, -1.0));
 
-    m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
+    m_chooser.setDefaultOption("Aim", new AimShoot()); //Aim to target then end
     m_chooser.addOption("MinTesting", m_mintest);
 
     SmartDashboard.putData("auto-chooser", m_chooser); //Send the Auto Chooser
   }
+
+
 
   public Command getAutonomousCommand() {
     return m_chooser.getSelected(); //Get the selected auto from the chooser
