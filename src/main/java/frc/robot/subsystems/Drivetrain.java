@@ -120,7 +120,6 @@ public class Drivetrain extends SubsystemBase {
     double min_command = -0.05;
 
     //Limelight Data
-    
     boolean tv = m_limelight.getIsTargetFound();
     double tx = m_limelight.getdegRotationToTarget();
     double ty = m_limelight.getdegVerticalToTarget();
@@ -150,25 +149,18 @@ public class Drivetrain extends SubsystemBase {
         distanceError = 0;
       }
 
-      if(zRotation > 0){
-        if(zRotation < min_command){
-          zRotation += min_command;
-        }
+      if((zRotation > 0) && (zRotation < min_command)){
+        zRotation += min_command;
       }
-      else if(zRotation < 0){
-        if(zRotation > -min_command){
+      else if((zRotation < 0) && (zRotation > -min_command)){
           zRotation -= min_command;
-        }
       }
-      if(xSpeed > 0){
-        if(xSpeed < min_command){
+
+      if((xSpeed > 0) && (xSpeed < min_command)){
           xSpeed += min_command;
-        }
       }
-      else if(xSpeed < 0){
-        if(xSpeed > -min_command){
+      else if((xSpeed < 0) && (xSpeed > -min_command)){
           xSpeed -= min_command;
-        }
       }
 
       comboDrive(xSpeed, zRotation); //Drive with the calculated parameters 
