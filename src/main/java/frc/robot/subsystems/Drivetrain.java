@@ -49,9 +49,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void comboDrive(double xSpeed, double zRotation) {
-
-    xSpeed = MathUtil.clamp(xSpeed, -1, 1); //Prevents Extranious Input
-    zRotation = MathUtil.clamp(zRotation, -1, 1); //Prevents Extranious Input
+    //Prevents Extranious Input
+    xSpeed = MathUtil.clamp(xSpeed, -1, 1);
+    zRotation = MathUtil.clamp(zRotation, -1, 1);
+  
+    //Apply Deadband
+    xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
+    zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
 
     double[] wheelSpeeds = new double[2]; //Create Motor Power Array
 
@@ -97,7 +101,7 @@ public class Drivetrain extends SubsystemBase {
    * @param deadband Deadband threshold
    */
   @SuppressWarnings("unused")
-  private double applyDeadband(double input, double deadband) {
+  private double linearDeadband(double input, double deadband) {
     if (Math.abs(input) > deadband) {
       if (input > 0.0) {
         return (input - deadband) / (1.0 - deadband);
@@ -109,7 +113,6 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  @SuppressWarnings("unused")
   private double cubicScaledDeadband(double input, double deadband, double weight){
 
     double w = weight;
