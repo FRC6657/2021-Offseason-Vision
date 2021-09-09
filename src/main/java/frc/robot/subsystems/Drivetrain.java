@@ -120,12 +120,15 @@ public class Drivetrain extends SubsystemBase {
    */
   private double cubicScaledDeadband(double input, double deadband, double weight){
 
+    //Make the inputs smaller in size to make the equation more 'readable'
     double w = weight;
     double d = deadband;
     double x = input;
 
+    //default output value
     double output = 0;
 
+    //This equation is long an complicated here is a visual representation: https://www.desmos.com/calculator/j5ubug15j2
     if(Math.abs(x) > deadband){
       output = (((w * (x * x * x) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (d * d * d) + (1 - w) * d)) / (1 - (w * (d * d * d) + (1 - w) * d)));
     }
