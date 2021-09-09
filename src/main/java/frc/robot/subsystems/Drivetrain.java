@@ -76,6 +76,7 @@ public class Drivetrain extends SubsystemBase {
    * to the motors while also preserving the magnitude difference
    * between each values.
    */
+  @SuppressWarnings("unused")
   private void normalize(double[] wheelSpeeds) {
     double maxMagnitude = Math.abs(wheelSpeeds[0]);
     for (int i = 1; i < wheelSpeeds.length; i++) {
@@ -95,6 +96,7 @@ public class Drivetrain extends SubsystemBase {
    * @param input    Input in need of a deadband
    * @param deadband Deadband threshold
    */
+  @SuppressWarnings("unused")
   private double applyDeadband(double input, double deadband) {
     if (Math.abs(input) > deadband) {
       if (input > 0.0) {
