@@ -6,7 +6,8 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.utils.DPadButton;
+import frc.robot.utils.DPadButton.Direction;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,6 +44,12 @@ public class RobotContainer {
     final JoystickButton b = new JoystickButton(m_controller, XboxController.Button.kB.value);
     final JoystickButton x = new JoystickButton(m_controller, XboxController.Button.kX.value);
     final JoystickButton y = new JoystickButton(m_controller, XboxController.Button.kY.value);
+
+    final DPadButton dPadUp = new DPadButton(m_controller, Direction.UP);
+    final DPadButton dPadDown = new DPadButton(m_controller, Direction.DOWN);
+    final DPadButton dPadLeft = new DPadButton(m_controller, Direction.LEFT);
+    final DPadButton dPadRight = new DPadButton(m_controller, Direction.RIGHT);
+
 
     a.whenHeld(new cOuttake(m_outtake));
     b.whenHeld(new cIntake(m_intake, 0.4));

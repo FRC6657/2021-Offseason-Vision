@@ -1,14 +1,15 @@
 package frc.robot.utils;
-import edu.wpi.first.wpilibj.Joystick;
+
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class DPadButton extends Button {
     
-    Joystick joystick;
+    XboxController m_controller;
     Direction direction;
 
-    public DPadButton(Joystick joystick, Direction direction){
-        this.joystick = joystick;
+    public DPadButton(XboxController m_controller, Direction direction){
+        this.m_controller = m_controller;
         this.direction = direction;
     }
 
@@ -21,9 +22,9 @@ public class DPadButton extends Button {
     }
 
     public boolean get() {
-        int dPadValue = joystick.getPOV();
+        int dPadValue = m_controller.getPOV();
         return (dPadValue == direction.direction) || (dPadValue == (direction.direction + 45) % 360)
         || (dPadValue == (direction.direction + 315) % 360);
     }
-    
+
 }
