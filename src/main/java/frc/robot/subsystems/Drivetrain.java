@@ -127,10 +127,10 @@ public class Drivetrain extends SubsystemBase {
     //default output value
     double output = 0;
 
-    //This equation is long an complicated here is a visual representation: https://www.desmos.com/calculator/7i0gqvqfjo
+    //This equation is long an complicated here is a visual representation: https://www.desmos.com/calculator/coy9bhp32l
     if(Math.abs(x) > deadband){
       output = (((w * (x * x * x) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (d * d * d) + (1 - w) * d)) / (1 - (w * (d * d * d) + (1 - w) * d)));
-    }
+    } 
     else{
       output=0;
     }
