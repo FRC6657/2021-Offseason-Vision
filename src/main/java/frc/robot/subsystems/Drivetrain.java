@@ -54,15 +54,15 @@ public class Drivetrain extends SubsystemBase {
     zRotation = MathUtil.clamp(zRotation, -1, 1);
   
     //Apply Deadband
-    xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
-    zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
+    //xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
+    //zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
 
     double[] wheelSpeeds = new double[2]; //Create Motor Power Array
 
     wheelSpeeds[0] = xSpeed + zRotation; //Left Speed
     wheelSpeeds[1] = -(xSpeed - zRotation); //Right Speed
   
-    normalize(wheelSpeeds); //Scale values down while maintaining magnitude
+    ///normalize(wheelSpeeds); //Scale values down while maintaining magnitude
 
     m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Powers
     m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Powers
