@@ -36,7 +36,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
-      () -> m_controller.getRawAxis(XboxController.Axis.kLeftY.value) * SmartDashboard.getNumber("speed-multiplier", 25)/100,
+      () -> (m_controller.getRawAxis(XboxController.Axis.kRightTrigger.value) - m_controller.getRawAxis(XboxController.Axis.kLeftTrigger.value)) * SmartDashboard.getNumber("speed-multiplier", 25)/100,
       () -> m_controller.getRawAxis(XboxController.Axis.kRightX.value) * SmartDashboard.getNumber("speed-multiplier", 25)/100
     ));
 
@@ -53,7 +53,7 @@ public class RobotContainer {
 
     a.whenHeld(new cOuttake(m_outtake));
     b.whenHeld(new cIntake(m_intake, 0.4));
-    x.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
+    dPadDown.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
     y.whenHeld(new Agipotate(m_agipotato, 1.0));
 
     m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
