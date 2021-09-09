@@ -58,7 +58,7 @@ public class Drivetrain extends SubsystemBase {
     wheelSpeeds[0] = xSpeed + zRotation; //Left Speed
     wheelSpeeds[1] = -(xSpeed - zRotation); //Right Speed
   
-    //normalize(wheelSpeeds); //Scale values down while maintaining magnitude
+    normalize(wheelSpeeds); //Scale values down while maintaining magnitude
 
     m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Powers
     m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Powers
@@ -107,6 +107,18 @@ public class Drivetrain extends SubsystemBase {
     } else {
       return 0.0;
     }
+  }
+
+  @SuppressWarnings("unused")
+  private double cubicScaledDeadband(double input, double deadband, double weight){
+
+    double w = weight;
+    double d = deadband;
+    double x = input;
+    double output = ((w * (x * x * x) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (d * d * d) + (1 - w) * d)) / (1 - (w * (d * d * d) + (1 - w) * d));
+
+    return output;
+
   }
   
   /**
