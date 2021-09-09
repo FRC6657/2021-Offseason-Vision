@@ -113,13 +113,25 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
+    /**
+   * @param input    Input in need of a deadband
+   * @param deadband Deadband threshold
+   * @param weight   Weight of the curve
+   */
   private double cubicScaledDeadband(double input, double deadband, double weight){
 
     double w = weight;
     double d = deadband;
     double x = input;
-    double output = ((w * (x * x * x) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (d * d * d) + (1 - w) * d)) / (1 - (w * (d * d * d) + (1 - w) * d));
 
+    double output = 0;
+
+    if(Math.abs(x) > deadband){
+      output = (((w * (x * x * x) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (d * d * d) + (1 - w) * d)) / (1 - (w * (d * d * d) + (1 - w) * d)));
+    }
+    else{
+      output=0;
+    }
     return output;
 
   }
