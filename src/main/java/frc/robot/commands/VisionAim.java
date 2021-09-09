@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class AimBot extends CommandBase {
+public class VisionAim extends CommandBase {
 
   Drivetrain m_drivetrain;
 
-  public AimBot(Drivetrain m_drivetrain) {
+  public VisionAim(Drivetrain m_drivetrain) {
     
     this.m_drivetrain = m_drivetrain;
 
