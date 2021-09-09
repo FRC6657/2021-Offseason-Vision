@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +21,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Agipotato m_agipotato = new Agipotato();
 
-  private final Joystick m_nes = new Joystick(0); //Controller
+  private final XboxController m_controller = new XboxController(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
   private final AimBot m_aimbot = new AimBot(m_drivetrain); //Aimbot Command
   private final MinCommandTesting m_mintest = new MinCommandTesting(m_drivetrain, 0.1);
@@ -34,19 +35,19 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
-      () -> m_nes.getY() * SmartDashboard.getNumber("speed-multiplier", 25)/100,
-      () -> m_nes.getX() * SmartDashboard.getNumber("speed-multiplier", 25)/100
+      () -> m_controller.getY() * SmartDashboard.getNumber("speed-multiplier", 25)/100,
+      () -> m_controller.getX() * SmartDashboard.getNumber("speed-multiplier", 25)/100
     ));
 
-    final JoystickButton a = new JoystickButton(m_nes, 1);
-    final JoystickButton b = new JoystickButton(m_nes, 2);
-    final JoystickButton select = new JoystickButton(m_nes, 3);
-    final JoystickButton start = new JoystickButton(m_nes, 4);
+    final JoystickButton a = new JoystickButton(m_controller, XboxController.Button.kA.value);
+    final JoystickButton b = new JoystickButton(m_controller, XboxController.Button.kB.value);
+    final JoystickButton x = new JoystickButton(m_controller, XboxController.Button.kX.value);
+    final JoystickButton y = new JoystickButton(m_controller, XboxController.Button.kY.value);
 
     a.whenHeld(new cOuttake(m_outtake));
     b.whenHeld(new cIntake(m_intake, 0.4));
-    select.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
-    start.whenHeld(new Agipotate(m_agipotato, 1.0));
+    x.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
+    y.whenHeld(new Agipotate(m_agipotato, 1.0));
 
     m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
     m_chooser.addOption("MinTesting", m_mintest);
