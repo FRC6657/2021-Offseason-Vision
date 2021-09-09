@@ -8,6 +8,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utils.DPadButton;
 import frc.robot.utils.DPadButton.Direction;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,11 +51,17 @@ public class RobotContainer {
     final DPadButton dPadLeft = new DPadButton(m_controller, Direction.LEFT);
     final DPadButton dPadRight = new DPadButton(m_controller, Direction.RIGHT);
 
+    final JoystickButton rBumper = new JoystickButton(m_controller, XboxController.Button.kBumperRight.value);
+    final JoystickButton lBumper = new JoystickButton(m_controller, XboxController.Button.kBumperLeft.value);
 
-    a.whenHeld(new cOuttake(m_outtake));
-    b.whenHeld(new cIntake(m_intake, 0.4));
-    dPadDown.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
-    y.whenHeld(new Agipotate(m_agipotato, 1.0));
+    final JoystickButton start = new JoystickButton(m_controller, XboxController.Button.kStart.value);
+    final JoystickButton back = new JoystickButton(m_controller, XboxController.Button.kBack.value);
+
+    rBumper.whenHeld(new cOuttake(m_outtake));
+    lBumper.whenHeld(new cIntake(m_intake, 0.4));
+    start.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
+    dPadRight.whenHeld(new Agipotate(m_agipotato, 1.0));
+    dPadLeft.whenHeld(new Agipotate(m_agipotato, -1.0));
 
     m_chooser.setDefaultOption("Aim", m_aimbot); //Aim to target then end
     m_chooser.addOption("MinTesting", m_mintest);
