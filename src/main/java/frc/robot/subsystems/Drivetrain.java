@@ -179,17 +179,17 @@ public class Drivetrain extends SubsystemBase {
       }
 
       if((zRotation > 0) && (zRotation < min_command)){
-        zRotation += min_command;
+        zRotation = min_command;
       }
       else if((zRotation < 0) && (zRotation > -min_command)){
-          zRotation -= min_command;
+          zRotation = -min_command;
       }
 
       if((xSpeed > 0) && (xSpeed < min_command)){
-          xSpeed += min_command;
+          xSpeed = min_command;
       }
       else if((xSpeed < 0) && (xSpeed > -min_command)){
-          xSpeed -= min_command;
+          xSpeed = -min_command;
       }
 
       comboDrive(xSpeed, zRotation); //Drive with the calculated parameters 
