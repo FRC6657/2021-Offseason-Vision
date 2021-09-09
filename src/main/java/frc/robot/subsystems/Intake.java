@@ -16,14 +16,10 @@ public class Intake extends SubsystemBase {
 
   private WPI_TalonSRX Intake;
   /**
-   * 
-   * Intake Subsystem
-   * 
+   * Intake Subsystem 
    */
   public Intake() {
-
       Intake = new WPI_TalonSRX(5);
-
       Intake.setNeutralMode(NeutralMode.Brake);
 
   }

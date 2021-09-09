@@ -21,7 +21,7 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain(); //Drivetrain Subsystem
   private final Outtake m_outtake = new Outtake();
   private final Intake m_intake = new Intake();
-  private final Agipotato m_agipotato = new Agipotato();
+  private final Agitator m_agipotato = new Agitator();
 
   private final XboxController m_controller = new XboxController(0); //Controller
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
@@ -69,8 +69,8 @@ public class RobotContainer {
     rBumper.whenHeld(new cOuttake(m_outtake));
     lBumper.whenHeld(new cIntake(m_intake, 0.4));
     start.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
-    dPadRight.whenHeld(new Agipotate(m_agipotato, 1.0));
-    dPadLeft.whenHeld(new Agipotate(m_agipotato, -1.0));
+    dPadRight.whenHeld(new cAgitator(m_agipotato, 1.0));
+    dPadLeft.whenHeld(new cAgitator(m_agipotato, -1.0));
 
     m_chooser.setDefaultOption("Aim", new AimShoot()); //Aim to target then end
     m_chooser.addOption("MinTesting", m_mintest);

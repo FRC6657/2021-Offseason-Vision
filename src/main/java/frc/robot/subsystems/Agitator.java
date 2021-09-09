@@ -11,28 +11,17 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Agipotato extends SubsystemBase {
+public class Agitator extends SubsystemBase {
 
-  private WPI_TalonSRX Agipotato;
+  private WPI_TalonSRX m_agitator;
   /**
-   * 
    * Agitator Subsystem
-   * 
    */
-  public Agipotato() {
-  
-      Agipotato = new WPI_TalonSRX(9);
- 
+  public Agitator() {  
+      m_agitator = new WPI_TalonSRX(9);
   }
   //Spins the agitator
   public void agipotate(double speed){
-
-    Agipotato.set(speed);
-
-  }
-
-  @Override
-  public void periodic() {
-
+    m_agitator.set(speed);
   }
 }

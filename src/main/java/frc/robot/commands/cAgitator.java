@@ -8,39 +8,39 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Agipotato;
+import frc.robot.subsystems.Agitator;
 
-public class Agipotate extends CommandBase {
+public class cAgitator extends CommandBase {
 
-  private final Agipotato m_agipotato;
+  private final Agitator m_agitator;
   private final double speed;
 
 /**
  * This command runs the Agitator at a set speed while the command is executed
  *
- * @param  Agipotato the Agitator Subsystem
+ * @param  Agitator the Agitator Subsystem
  * @param  speed the speed at which the motor is told to run
  * @see    Agipotato
  * 
  * @author Andrew Card
  */
-  public Agipotate(Agipotato m_agipotato, double speed) {
+  public cAgitator(Agitator m_agitator, double speed) {
 
-    this.m_agipotato = m_agipotato;
+    this.m_agitator = m_agitator;
     this.speed = speed;
 
-    addRequirements(m_agipotato);
+    addRequirements(m_agitator);
 
   }
 
   @Override
   public void execute() {
-    m_agipotato.agipotate(speed);
+    m_agitator.agipotate(speed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_agipotato.agipotate(0);
+    m_agitator.agipotate(0);
   }
 
   @Override
