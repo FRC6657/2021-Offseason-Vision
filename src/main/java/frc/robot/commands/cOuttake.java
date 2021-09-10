@@ -21,7 +21,7 @@ public class cOuttake extends CommandBase {
    * <p>
    * This command raises the Hopper Gate when Initialized, and Lowers it when Ended
    *
-   * @param cOuttake the Outtake Subsystem
+   * @param m_outtake the Outtake Subsystem
    * @see Outtake
    * 
    * @author Andrew Card
@@ -36,27 +36,20 @@ public class cOuttake extends CommandBase {
   }
   @Override
   public void initialize() {
-
-    m_outtake.setServoAngle(115);
-
+    m_outtake.setServoAngle(115); //Sets the servo gate to open
   }
 
   @Override
   public void execute() {
-
-    m_outtake.outtakeOut(0.9);
-
-    SmartDashboard.putString("shooter-value", "On");
-
+    m_outtake.outtake(0.9); //Runs the outtake
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_outtake.outtakeStop();
+    
+    m_outtake.outtake(0); //Stops the outtake
 
-    m_outtake.setServoAngle(167);
-
-    SmartDashboard.putString("shooter-value", "Off");
+    m_outtake.setServoAngle(167); // Closes the servo gate
 
   }
 

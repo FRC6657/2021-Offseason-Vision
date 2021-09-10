@@ -48,14 +48,18 @@ public class Drivetrain extends SubsystemBase {
     
   }
 
+  /**
+   * @param xSpeed Forward Speed
+   * @param zRotation Rotational Speed
+   * 
+   * This function is what should be used when driving the robot (no deadbands are applied)
+   * 
+   * @author Andrew Card
+   */
   public void comboDrive(double xSpeed, double zRotation) {
     //Prevents Extranious Input
     xSpeed = MathUtil.clamp(xSpeed, -1, 1);
     zRotation = MathUtil.clamp(zRotation, -1, 1);
-  
-    //Apply Deadband
-    xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
-    zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
 
     double[] wheelSpeeds = new double[2]; //Create Motor Power Array
 
@@ -73,12 +77,47 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
+   * @param xSpeed Forward Speed
+   * @param zRotation Roational Speed
+   * 
+   * This function should be used to drive the robot in teleOp because it has deadbands applied
+   * 
+   * @author Andrew Card
+   */
+  public void teleComboDrive(double xSpeed, double zRotation) {
+
+        //Prevents Extranious Input
+        xSpeed = MathUtil.clamp(xSpeed, -1, 1);
+        zRotation = MathUtil.clamp(zRotation, -1, 1);
+      
+        //Apply Deadband
+        xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
+        zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
+    
+        double[] wheelSpeeds = new double[2]; //Create Motor Power Array
+    
+        wheelSpeeds[0] = xSpeed + zRotation; //Left Speed
+        wheelSpeeds[1] = -(xSpeed - zRotation); //Right Speed
+      
+        ///normalize(wheelSpeeds); //Scale values down while maintaining magnitude
+    
+        m_leftmotors.set(wheelSpeeds[0]); //Set Left Motor Powers
+        m_rightmotors.set(wheelSpeeds[1]); //Set Right Motor Powers
+    
+        SmartDashboard.putNumber("left-motor",  m_leftmotors.get()); //Put left motor power on the Dashboard
+        SmartDashboard.putNumber("right-motor", m_rightmotors.get()); //Put right motor power on the Dashboard
+
+  }
+
+  /**
    * @param wheelSpeeds Array of wheel speeds to normalize
    * 
    * This function takes an array of values and normalize them.
    * Keeping all of the values in line with what should be passed
    * to the motors while also preserving the magnitude difference
    * between each values.
+   * 
+   * @author WPI
    */
   private void normalize(double[] wheelSpeeds) {
     double maxMagnitude = Math.abs(wheelSpeeds[0]);
@@ -98,6 +137,8 @@ public class Drivetrain extends SubsystemBase {
   /**
    * @param input    Input in need of a deadband
    * @param deadband Deadband threshold
+   * 
+   * @author WPI
    */
   @SuppressWarnings("unused")
   private double linearDeadband(double input, double deadband) {
@@ -116,6 +157,8 @@ public class Drivetrain extends SubsystemBase {
    * @param input    Input in need of a deadband
    * @param deadband Deadband threshold
    * @param weight   Weight of the curve
+   * 
+   * @author Andrew Card
    */
   private double cubicScaledDeadband(double input, double deadband, double weight){
 
@@ -139,7 +182,9 @@ public class Drivetrain extends SubsystemBase {
   }
   
   /**
-   * Autonomous Vision Drive
+   * Drives the robot autonomously using vision
+   * 
+   * @author Andrew Card
   */
   public void visionDrive(){
     //kP values
@@ -155,6 +200,7 @@ public class Drivetrain extends SubsystemBase {
     double tx = m_limelight.getdegRotationToTarget();
     double ty = m_limelight.getdegVerticalToTarget();
     
+    //Test Inputs
     //boolean tv = true;
     //double tx = 29.8;
     //double ty = 0;
@@ -168,11 +214,13 @@ public class Drivetrain extends SubsystemBase {
 
       //Error Values
       double horizontalError = -tx; //Turn Error
-      double distanceError = ty;
+      double distanceError = ty; //Distance Error
 
+      //Speed Calculations
       zRotation = kpAim * horizontalError;
       xSpeed = kpDistance * distanceError;
 
+      //'Close Enough' shutoffs
       if(Math.abs(horizontalError) < 0.5){
         horizontalError = 0;
       }
@@ -180,6 +228,7 @@ public class Drivetrain extends SubsystemBase {
         distanceError = 0;
       }
 
+      //Min Command
       if((zRotation > 0) && (zRotation < min_command)){
         zRotation = min_command;
       }
@@ -203,7 +252,7 @@ public class Drivetrain extends SubsystemBase {
       System.out.println("No Target");
 
       zRotation = 0.4;
-      comboDrive(xSpeed, zRotation); //Turn Slowly
+      comboDrive(xSpeed, zRotation); //Drive with a slow turn
 
     }
 
@@ -214,6 +263,9 @@ public class Drivetrain extends SubsystemBase {
     return m_limelight;
   }
 
+  /** 
+   * @return The left and right currently set motor values
+   */
   public double[] getMotorValues(){
     double[] motorValues = new double[1];
     motorValues[0] = m_leftmotors.get();

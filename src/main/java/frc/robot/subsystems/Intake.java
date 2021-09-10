@@ -23,11 +23,9 @@ public class Intake extends SubsystemBase {
       Intake.setNeutralMode(NeutralMode.Brake);
 
   }
-  //Runs intake
+
   public void intake(double speed){
-
-    Intake.set(speed);
-
+    Intake.set(speed); //Run the intake
   }
 
   @Override

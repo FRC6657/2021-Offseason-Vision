@@ -18,19 +18,25 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
-  private final Drivetrain m_drivetrain = new Drivetrain(); //Drivetrain Subsystem
+  //Subsystem Declarations
+  private final Drivetrain m_drivetrain = new Drivetrain();
   private final Outtake m_outtake = new Outtake();
   private final Intake m_intake = new Intake();
   private final Agitator m_agipotato = new Agitator();
 
-  private final XboxController m_controller = new XboxController(0); //Controller
+  //Controller Declarations
+  private final XboxController m_controller = new XboxController(0);
+
+  //Shuffleboard Declarations
   private final SendableChooser<Command> m_chooser = new SendableChooser<>(); //Auto Chooser
-  private final MinCommandTesting m_mintest = new MinCommandTesting(m_drivetrain, 0.1);
 
   public RobotContainer() {
     configureButtonBindings();
   }
 
+  /**
+   * Autonomous for automatically aiming and shooting at a target
+   */
   public class AimShoot extends SequentialCommandGroup {
     public AimShoot(){
       addCommands(  
@@ -43,6 +49,7 @@ public class RobotContainer {
   @SuppressWarnings("unused")
   private void configureButtonBindings() {
     
+    //Default Command Declarations
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
@@ -50,6 +57,7 @@ public class RobotContainer {
       () -> m_controller.getRawAxis(XboxController.Axis.kRightX.value) * SmartDashboard.getNumber("speed-multiplier", 100)/100
     ));
 
+    //Every button input on the XBox Controller
     final JoystickButton a = new JoystickButton(m_controller, XboxController.Button.kA.value);
     final JoystickButton b = new JoystickButton(m_controller, XboxController.Button.kB.value);
     final JoystickButton x = new JoystickButton(m_controller, XboxController.Button.kX.value);
@@ -66,19 +74,19 @@ public class RobotContainer {
     final JoystickButton start = new JoystickButton(m_controller, XboxController.Button.kStart.value);
     final JoystickButton back = new JoystickButton(m_controller, XboxController.Button.kBack.value);
 
+    //Controller Bindings
     rBumper.whenHeld(new cOuttake(m_outtake));
     lBumper.whenHeld(new cIntake(m_intake, 0.4));
     start.whenHeld(new cIntake(m_intake, -0.4).withTimeout(0.05));
     dPadRight.whenHeld(new cAgitator(m_agipotato, 1.0));
     dPadLeft.whenHeld(new cAgitator(m_agipotato, -1.0));
 
+    //Auto Chooser population
     m_chooser.setDefaultOption("Aim", new AimShoot()); //Aim to target then end
-    m_chooser.addOption("MinTesting", m_mintest);
 
+    //Shuffleboard objects
     SmartDashboard.putData("auto-chooser", m_chooser); //Send the Auto Chooser
   }
-
-
 
   public Command getAutonomousCommand() {
     return m_chooser.getSelected(); //Get the selected auto from the chooser

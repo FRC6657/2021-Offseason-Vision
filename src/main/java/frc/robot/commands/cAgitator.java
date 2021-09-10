@@ -18,9 +18,9 @@ public class cAgitator extends CommandBase {
 /**
  * This command runs the Agitator at a set speed while the command is executed
  *
- * @param  Agitator the Agitator Subsystem
- * @param  speed the speed at which the motor is told to run
- * @see    Agipotato
+ * @param  m_agitator the Agitator Subsystem
+ * @param  speed the speed at which the agitator is told to run
+ * @see    Agitator
  * 
  * @author Andrew Card
  */
@@ -35,12 +35,12 @@ public class cAgitator extends CommandBase {
 
   @Override
   public void execute() {
-    m_agitator.agipotate(speed);
+    m_agitator.agitate(speed); //Run the agitator
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_agitator.agipotate(0);
+    m_agitator.agitate(0); //Stop the agitator
   }
 
   @Override

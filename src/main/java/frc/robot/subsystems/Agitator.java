@@ -8,11 +8,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Agitator extends SubsystemBase {
-
   private WPI_TalonSRX m_agitator;
   /**
    * Agitator Subsystem
@@ -21,7 +19,7 @@ public class Agitator extends SubsystemBase {
       m_agitator = new WPI_TalonSRX(9);
   }
   //Spins the agitator
-  public void agipotate(double speed){
-    m_agitator.set(speed);
+  public void agitate(double speed){
+    m_agitator.set(speed); //Sets the outtake motor speed
   }
 }

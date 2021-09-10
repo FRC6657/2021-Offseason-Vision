@@ -19,14 +19,14 @@ public class cIntake extends CommandBase {
   /**
    * This command runs the Intake when the command is executing
    *
-   * @param intake the Intake Subsystem
-   * @param speed the desired Intake Speed
-   * @see cIntake
+   * @param m_intake the Intake Subsystem
+   * @param speed the speed at which the intake is told to run
+   * @see Intake
    * 
    * @author Andrew Card
    */
 
-  public cIntake(Intake m_intake,double speed) {
+  public cIntake(Intake m_intake, double speed) {
    
     this.m_intake = m_intake;
     this.speed = speed;
@@ -37,15 +37,12 @@ public class cIntake extends CommandBase {
 
   @Override
   public void execute() {
-
-    m_intake.intake(speed);
-
+    m_intake.intake(speed); //Run the intake
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_intake.intake(0);
-    
+    m_intake.intake(0); //Stop the intake
   }
 
   @Override

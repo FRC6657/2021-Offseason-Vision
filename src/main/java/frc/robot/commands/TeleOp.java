@@ -16,6 +16,19 @@ public class TeleOp extends CommandBase {
   DoubleSupplier xSpeed;
   DoubleSupplier zRotation;
 
+  /**
+   * This runs the drivetrain in the TeleOp period
+   * <p>
+   *
+   * @param m_drivetrain the drivetrain subsystem
+   * @param xSpeed the desired forward speed input
+   * @param zRotation the desired turning speed input
+   * 
+   * @see m_drivetrain
+   * 
+   * @author Andrew Card
+   */
+
   public TeleOp(Drivetrain m_drivetrain, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     
     this.m_drivetrain = m_drivetrain;
@@ -28,19 +41,17 @@ public class TeleOp extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("TelOp Init");
+    System.out.println("TelOp Init"); //Print to verify TeleOp is running
   }
 
   @Override
   public void execute() {
-    m_drivetrain.comboDrive(-xSpeed.getAsDouble(), zRotation.getAsDouble());
+    m_drivetrain.teleComboDrive(-xSpeed.getAsDouble(), zRotation.getAsDouble()); //Runs the drivetrain with the controller suppplied doubles
   }
 
   @Override
   public void end(boolean interrupted) {
-
-    m_drivetrain.comboDrive(0, 0);
-
+    m_drivetrain.comboDrive(0, 0); //Stops the drivetrain when the command ends
   }
 
   @Override

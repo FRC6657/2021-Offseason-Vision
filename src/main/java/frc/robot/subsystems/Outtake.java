@@ -37,18 +37,11 @@ public class Outtake extends SubsystemBase {
 
   }
   //Outtakes
-  public void outtakeOut(double speed) {
+  public void outtake(double speed) {
 
     //I have no clue who the speeds both need to be negative
     outtakeLeft.set(-speed);
     outtakeRight.set(-speed);
-
-  }
-  //Stops the Outtake
-  public void outtakeStop() {
-
-    outtakeLeft.set(0);
-    outtakeRight.set(0);
 
   }
   //Sets the Hopper Gate Servo angle
