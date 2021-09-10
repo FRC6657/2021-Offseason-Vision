@@ -46,8 +46,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrain,
       new TeleOp(
       m_drivetrain, //Drivetrain Subsystem
-      () -> (m_controller.getRawAxis(XboxController.Axis.kRightTrigger.value) - m_controller.getRawAxis(XboxController.Axis.kLeftTrigger.value)) * (SmartDashboard.getNumber("speed-multiplier", 25)/100),
-      () -> m_controller.getRawAxis(XboxController.Axis.kRightX.value) * SmartDashboard.getNumber("speed-multiplier", 25)/100
+      () -> (m_controller.getRawAxis(XboxController.Axis.kRightTrigger.value) - m_controller.getRawAxis(XboxController.Axis.kLeftTrigger.value)) * (SmartDashboard.getNumber("speed-multiplier", 100)/100),
+      () -> m_controller.getRawAxis(XboxController.Axis.kRightX.value) * SmartDashboard.getNumber("speed-multiplier", 100)/100
     ));
 
     final JoystickButton a = new JoystickButton(m_controller, XboxController.Button.kA.value);

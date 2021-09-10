@@ -54,8 +54,8 @@ public class Drivetrain extends SubsystemBase {
     zRotation = MathUtil.clamp(zRotation, -1, 1);
   
     //Apply Deadband
-    //xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
-    //zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
+    xSpeed = cubicScaledDeadband(xSpeed, 0.05, 1);
+    zRotation = cubicScaledDeadband(zRotation, 0.05, 1);
 
     double[] wheelSpeeds = new double[2]; //Create Motor Power Array
 
@@ -129,8 +129,8 @@ public class Drivetrain extends SubsystemBase {
 
     //This equation is long an complicated here is a visual representation: https://www.desmos.com/calculator/coy9bhp32l
     if(Math.abs(x) > deadband){
-      output = (((w * (x * x * x) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (d * d * d) + (1 - w) * d)) / (1 - (w * (d * d * d) + (1 - w) * d)));
-    } 
+      output = (((w * (Math.pow(x, 3)) + 1*(1 - w) * x) - (Math.abs(x)) / x * (w * (Math.pow(d, 3)) + (1 - w) * d)) / (1 - (w * (Math.pow(d, 3)) + (1 - w) * d)));
+    }
     else{
       output=0;
     }
