@@ -41,7 +41,7 @@ public class cOuttake extends CommandBase {
 
   @Override
   public void execute() {
-    m_outtake.outtake(0.9); //Runs the outtake
+    m_outtake.outtake(1); //Runs the outtake
   }
 
   @Override

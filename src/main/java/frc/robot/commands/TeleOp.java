@@ -46,7 +46,7 @@ public class TeleOp extends CommandBase {
 
   @Override
   public void execute() {
-    m_drivetrain.teleComboDrive(-xSpeed.getAsDouble(), zRotation.getAsDouble()); //Runs the drivetrain with the controller suppplied doubles
+    m_drivetrain.teleComboDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()); //Runs the drivetrain with the controller suppplied doubles
   }
 
   @Override

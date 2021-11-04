@@ -40,6 +40,7 @@ public class RobotContainer {
   public class AimShoot extends SequentialCommandGroup {
     public AimShoot(){
       addCommands(  
+        new Seek(m_drivetrain),
         new VisionAim(m_drivetrain),
         new cOuttake(m_outtake).withTimeout(2) 
       );
