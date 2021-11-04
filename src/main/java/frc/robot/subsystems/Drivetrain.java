@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -45,7 +48,11 @@ public class Drivetrain extends SubsystemBase {
     //Assign motors to groups
     m_leftmotors = new SpeedControllerGroup(m_frontLeft, m_backLeft);
     m_rightmotors = new SpeedControllerGroup(m_frontRight, m_backRight);
-    
+
+    //Reset Limelight Settings
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1); //Off
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0); //Vision Mode
+     
   }
 
   /**
